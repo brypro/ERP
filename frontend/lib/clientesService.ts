@@ -105,3 +105,4 @@ class ClientesService {
 }
 
 export const clientesService = new ClientesService();
+export default clientesService;

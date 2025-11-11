@@ -123,3 +123,4 @@ class VehiculosService {
 }
 
 export const vehiculosService = new VehiculosService();
+export default vehiculosService;

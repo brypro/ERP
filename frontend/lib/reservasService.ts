@@ -114,3 +114,4 @@ class ReservasService {
 }
 
 export const reservasService = new ReservasService();
+export default reservasService;
