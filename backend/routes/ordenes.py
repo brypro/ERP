@@ -95,10 +95,9 @@ def create_orden():
         }), 500
 
 @ordenes_bp.route('/api/ordenes/<int:orden_id>', methods=['PUT'])
-def update_orden():
+def update_orden(orden_id):
     """Actualiza una orden de trabajo"""
     try:
-        orden_id = int(request.view_args['orden_id'])
 
         # Verificar que la orden existe
         existing = OrdenTrabajo.get_by_id(orden_id)
@@ -110,16 +109,7 @@ def update_orden():
 
         data = request.get_json()
 
-        # Validar datos requeridos
-        required_fields = ['vehiculo_id', 'fecha_ingreso', 'estado']
-        missing_fields = [field for field in required_fields if not data.get(field)]
-
-        if missing_fields:
-            return jsonify({
-                'success': False,
-                'error': f'Campos requeridos faltantes: {", ".join(missing_fields)}'
-            }), 400
-
+        # Actualizar la orden (permite actualizaciones parciales)
         orden = OrdenTrabajo.update(orden_id, data)
 
         # Obtener la orden completa con detalles

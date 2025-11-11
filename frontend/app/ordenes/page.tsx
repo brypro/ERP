@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import AppLayout from '@/components/AppLayout';
 import OrdenTable from '@/components/ordenes/OrdenTable';
+import OrdenModal from '@/components/ordenes/OrdenModal';
 import { ordenesService } from '@/lib/ordenesService';
 import type { OrdenTrabajo, EstadoOrden } from '@/types';
 
@@ -10,6 +11,8 @@ export default function OrdenesPage() {
   const [ordenes, setOrdenes] = useState<OrdenTrabajo[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedOrden, setSelectedOrden] = useState<OrdenTrabajo | null>(null);
+  const [editingOrden, setEditingOrden] = useState<OrdenTrabajo | null>(null);
+  const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [estadoFilter, setEstadoFilter] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
@@ -53,6 +56,42 @@ export default function OrdenesPage() {
     setSelectedOrden(null);
   };
 
+  const handleCreate = () => {
+    setEditingOrden(null);
+    setShowModal(true);
+  };
+
+  const handleEdit = (orden: OrdenTrabajo) => {
+    setEditingOrden(orden);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setEditingOrden(null);
+  };
+
+  const handleSave = async (data: any) => {
+    let response;
+
+    if (editingOrden) {
+      response = await ordenesService.update(editingOrden.id, data);
+    } else {
+      response = await ordenesService.create(data);
+    }
+
+    if (response.success) {
+      setSuccessMessage(
+        editingOrden ? 'Orden actualizada exitosamente' : 'Orden creada exitosamente'
+      );
+      handleCloseModal();
+      loadOrdenes();
+      setTimeout(() => setSuccessMessage(null), 3000);
+    } else {
+      setError(response.error || 'Error al guardar la orden');
+    }
+  };
+
   const handleDelete = async (id: number) => {
     if (!confirm('¿Está seguro de que desea eliminar esta orden?')) {
       return;
@@ -86,6 +125,12 @@ export default function OrdenesPage() {
               Gestión de órdenes de trabajo ({ordenes.length} registradas)
             </p>
           </div>
+          <button
+            onClick={handleCreate}
+            className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-3 rounded-lg transition-colors shadow-md"
+          >
+            + Nueva Orden
+          </button>
         </div>
 
         {/* Mensajes */}
@@ -143,7 +188,7 @@ export default function OrdenesPage() {
         {/* Tabla */}
         <OrdenTable
           ordenes={ordenes}
-          onEdit={() => {}}
+          onEdit={handleEdit}
           onDelete={handleDelete}
           onView={handleView}
           loading={loading}
@@ -237,6 +282,15 @@ export default function OrdenesPage() {
               </div>
             </div>
           </div>
+        )}
+
+        {/* Modal de Crear/Editar */}
+        {showModal && (
+          <OrdenModal
+            orden={editingOrden}
+            onSave={handleSave}
+            onClose={handleCloseModal}
+          />
         )}
       </div>
     </AppLayout>

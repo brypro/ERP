@@ -161,31 +161,37 @@ class OrdenTrabajo:
 
     @staticmethod
     def update(orden_id, data):
-        """Actualiza una orden de trabajo"""
-        query = """
+        """Actualiza una orden de trabajo (solo campos proporcionados)"""
+        # Campos permitidos para actualización
+        allowed_fields = [
+            'vehiculo_id', 'fecha_ingreso', 'fecha_entrega_estimada',
+            'fecha_entrega_real', 'estado', 'observaciones', 'total'
+        ]
+
+        # Construir UPDATE dinámicamente solo con campos proporcionados
+        update_fields = []
+        values = []
+        for field in allowed_fields:
+            if field in data:
+                update_fields.append(f"{field} = %s")
+                values.append(data[field])
+
+        if not update_fields:
+            # Si no hay campos para actualizar, retornar la orden actual
+            return OrdenTrabajo.get_by_id(orden_id)
+
+        # Agregar el ID al final para la cláusula WHERE
+        values.append(orden_id)
+
+        query = f"""
             UPDATE ordenes_trabajo
-            SET vehiculo_id = %s,
-                fecha_ingreso = %s,
-                fecha_entrega_estimada = %s,
-                fecha_entrega_real = %s,
-                estado = %s,
-                observaciones = %s,
-                total = %s
+            SET {', '.join(update_fields)}
             WHERE id = %s
             RETURNING id, vehiculo_id, fecha_ingreso, fecha_entrega_estimada,
                       fecha_entrega_real, estado, observaciones, total,
                       fecha_creacion, fecha_actualizacion
         """
-        result = execute_one(query, (
-            data.get('vehiculo_id'),
-            data.get('fecha_ingreso'),
-            data.get('fecha_entrega_estimada'),
-            data.get('fecha_entrega_real'),
-            data.get('estado'),
-            data.get('observaciones'),
-            data.get('total'),
-            orden_id
-        ))
+        result = execute_one(query, tuple(values))
         return result
 
     @staticmethod
