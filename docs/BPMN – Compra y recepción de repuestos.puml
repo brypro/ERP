@@ -1,0 +1,28 @@
+@startuml
+start
+partition "Bodega" {
+    :Detectar necesidad/stock crítico;
+    :Generar Orden de Compra;
+    :Enviar al proveedor;
+}
+partition "Proveedor" {
+    :Preparar y despachar repuestos;
+}
+partition "Bodega" {
+    :Recepcionar repuestos;
+    :Cotejar contra Orden de Compra;
+}
+if (¿Coincide?) then (Sí)
+    partition "Bodega" {
+        :Registrar recepción;
+        :Actualizar inventario;
+        :Cerrar Orden de Compra;
+    }
+else (No)
+    partition "Bodega" {
+        :Registrar diferencias;
+        :Notificar al proveedor;
+    }
+endif
+stop
+@enduml

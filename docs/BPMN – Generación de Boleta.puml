@@ -1,0 +1,15 @@
+@startuml
+start
+partition "Recepcionista" {
+    :Seleccionar OS cerrada;
+}
+partition "Sistema" {
+    :Calcular total (mano de obra + repuestos);
+    :Generar Boleta PDF;
+    :Registrar Boleta;
+}
+partition "Recepcionista" {
+    :Entregar boleta al cliente;
+}
+stop
+@enduml

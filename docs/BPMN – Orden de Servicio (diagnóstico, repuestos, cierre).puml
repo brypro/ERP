@@ -1,0 +1,37 @@
+@startuml
+start
+partition "Recepcionista" {
+    :Crear Orden de Servicio (recibir vehículo);
+    :Asignar mecánico;
+}
+partition "Mecánico" {
+    :Diagnóstico;
+    :Determinar repuestos;
+}
+if (¿Repuestos necesarios?) then (Sí)
+    partition "Recepción/Bodega" {
+        :Consultar inventario;
+    }
+    if (¿Disponible?) then (Sí)
+        partition "Recepción/Bodega" {
+            :Entregar repuestos al mecánico;
+        }
+    else (No)
+        partition "Recepción/Bodega" {
+            :Generar Orden de Compra a proveedor;
+            :Esperar llegada y recepcionar;
+            :Actualizar inventario;
+            :Entregar repuestos al mecánico;
+        }
+    endif
+endif
+partition "Mecánico" {
+    :Reparación;
+    :Finalizar trabajo;
+}
+partition "Recepcionista" {
+    :Actualizar OS (detalle trabajo + repuestos);
+    :Cerrar OS;
+}
+stop
+@enduml

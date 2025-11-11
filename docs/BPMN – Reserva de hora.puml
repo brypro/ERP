@@ -1,0 +1,45 @@
+@startuml
+start
+if (¿Reserva vía Web?) then (Cliente Web)
+    partition "Cliente (Web)" {
+        :Ingresar datos de reserva en sitio web;
+    }
+    partition "Sistema" {
+        :Validar horario disponible;
+    }
+    if (Horario disponible?) then (Sí)
+        partition "Sistema" {
+            :Registrar reserva;
+            :Enviar confirmación por email;
+        }
+    else (No)
+        partition "Sistema" {
+            :Rechazar solicitud (horario no disponible);
+        }
+    endif
+else (Recepcionista)
+    partition "Recepcionista" {
+        :Recepcionar solicitud de hora;
+        :Ingresar datos de reserva en el sistema;
+    }
+    partition "Sistema" {
+        :Validar horario disponible;
+    }
+    if (Horario disponible?) then (Sí)
+        partition "Sistema" {
+            :Registrar reserva;
+        }
+        partition "Recepcionista" {
+            :Confirmar reserva al cliente;
+        }
+    else (No)
+        partition "Sistema" {
+            :Notificar no disponibilidad;
+        }
+        partition "Recepcionista" {
+            :Proponer nueva fecha al cliente;
+        }
+    endif
+endif
+stop
+@enduml

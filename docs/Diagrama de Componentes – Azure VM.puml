@@ -1,0 +1,14 @@
+@startuml
+skinparam componentStyle rectangular
+node "Azure VM (Ubuntu LTS)" {
+  component "Nginx\n(Reverse Proxy + TLS)" as nginx
+  component "Next.js\n(SSR/Node + PM2)" as next
+  component "FastAPI\n(Gunicorn/Uvicorn)" as api
+  database "PostgreSQL" as db
+}
+actor "Usuario" as user
+user --> nginx : HTTPS
+nginx --> next : SSR/estáticos
+nginx --> api : REST/JSON
+api --> db : SQL (TCP)
+@enduml

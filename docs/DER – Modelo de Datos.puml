@@ -1,0 +1,102 @@
+@startuml
+skinparam linetype ortho
+entity "Cliente" as Cliente {
+    * id_cliente : int <<PK>>
+    --
+    nombre : string
+    telefono : string
+    email : string
+}
+entity "Vehículo" as Vehiculo {
+    * id_vehiculo : int <<PK>>
+    patente : string
+    marca_modelo : string
+    --
+    id_cliente : int <<FK>>
+}
+entity "Reserva" as Reserva {
+    * id_reserva : int <<PK>>
+    fecha_hora : datetime
+    estado : string
+    --
+    id_cliente : int <<FK>>
+    id_vehiculo : int <<FK>>
+}
+entity "Orden de Servicio" as OS {
+    * id_orden : int <<PK>>
+    fecha_inicio : date
+    fecha_cierre : date
+    estado : string
+    diagnostico : string
+    --
+    id_vehiculo : int <<FK>>
+}
+entity "Repuesto" as Repuesto {
+    * id_repuesto : int <<PK>>
+    nombre : string
+    precio_unitario : int
+    sku : string
+}
+entity "Inventario" as Inventario {
+    * id_inventario : int <<PK>>
+    cantidad : int
+    stock_critico : int
+    --
+    id_repuesto : int <<FK>>
+}
+entity "Proveedor" as Proveedor {
+    * id_proveedor : int <<PK>>
+    nombre : string
+    contacto : string
+}
+entity "Compra" as Compra {
+    * id_compra : int <<PK>>
+    fecha : date
+    estado : string
+    --
+    id_proveedor : int <<FK>>
+}
+entity "DetalleCompra" as DCompra {
+    * id_dc : int <<PK>>
+    cantidad : int
+    precio_unitario : int
+    --
+    id_compra : int <<FK>>
+    id_repuesto : int <<FK>>
+}
+entity "Recepción" as Recepcion {
+    * id_recepcion : int <<PK>>
+    fecha : date
+    observaciones : string
+    --
+    id_compra : int <<FK>>
+}
+entity "Boleta" as Boleta {
+    * id_boleta : int <<PK>>
+    fecha : date
+    total : int
+    pdf_path : string
+    --
+    id_orden : int <<FK>>
+}
+entity "DetalleOS" as DOS {
+    * id_dos : int <<PK>>
+    cantidad : int
+    precio_unitario : int
+    --
+    id_orden : int <<FK>>
+    id_repuesto : int <<FK>>
+}
+Cliente "1" -- "N" Vehiculo : posee >
+Cliente "1" -- "N" Reserva : realiza >
+Vehiculo "1" -- "N" Reserva : tiene >
+Vehiculo "1" -- "N" OS : registra >
+OS "1" -- "N" DOS : detalla >
+DOS "N" -- "1" Repuesto : usa >
+Repuesto "1" -- "1" Inventario : stock >
+Proveedor "1" -- "N" Compra : recibe >
+Compra "1" -- "N" DCompra : contiene >
+DCompra "N" -- "1" Repuesto : repuesto >
+Compra "1" -- "0..1" Recepcion : genera >
+OS "1" -- "1" Boleta : factura >
+@enduml
