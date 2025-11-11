@@ -46,6 +46,50 @@ export interface Reserva {
   vehiculo_placa?: string;
 }
 
+export interface Servicio {
+  id: number;
+  nombre: string;
+  descripcion?: string | null;
+  precio: number;
+  fecha_creacion?: string;
+  fecha_actualizacion?: string;
+}
+
+export type EstadoOrden = 'pendiente' | 'en_proceso' | 'completado' | 'entregado';
+
+export interface OrdenDetalle {
+  id: number;
+  orden_id: number;
+  servicio_id: number;
+  cantidad: number;
+  precio_unitario: number;
+  subtotal: number;
+  fecha_creacion?: string;
+  servicio_nombre?: string;
+  servicio_descripcion?: string;
+}
+
+export interface OrdenTrabajo {
+  id: number;
+  vehiculo_id: number;
+  fecha_ingreso: string;
+  fecha_entrega_estimada?: string | null;
+  fecha_entrega_real?: string | null;
+  estado: EstadoOrden;
+  observaciones?: string | null;
+  total: number;
+  fecha_creacion?: string;
+  fecha_actualizacion?: string;
+  vehiculo_marca?: string;
+  vehiculo_modelo?: string;
+  vehiculo_placa?: string;
+  cliente_id?: number;
+  cliente_nombre?: string;
+  cliente_apellido?: string;
+  cliente_telefono?: string;
+  detalles?: OrdenDetalle[];
+}
+
 export interface OrdenServicio {
   id_orden: number;
   fecha_inicio: string; // ISO date string

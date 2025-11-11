@@ -14,6 +14,7 @@ const navItems: NavItem[] = [
   { name: 'Clientes', href: '/clientes', icon: '👥' },
   { name: 'Vehículos', href: '/vehiculos', icon: '🚗' },
   { name: 'Reservas', href: '/reservas', icon: '📅' },
+  { name: 'Servicios', href: '/servicios', icon: '🛠️' },
   { name: 'Órdenes de Servicio', href: '/ordenes', icon: '🔧' },
   { name: 'Inventario', href: '/inventario', icon: '📦' },
   { name: 'Proveedores', href: '/proveedores', icon: '🏭' },

@@ -7,7 +7,8 @@ class Reserva:
     def get_all():
         """Obtiene todas las reservas con información del cliente y vehículo"""
         query = """
-            SELECT r.id, r.cliente_id, r.vehiculo_id, r.fecha_reserva, r.hora_reserva,
+            SELECT r.id, r.cliente_id, r.vehiculo_id, r.fecha_reserva,
+                   r.hora_reserva::text as hora_reserva,
                    r.servicio_solicitado, r.estado, r.observaciones,
                    r.fecha_creacion, r.fecha_actualizacion,
                    c.nombre as cliente_nombre, c.apellido as cliente_apellido,
@@ -25,7 +26,8 @@ class Reserva:
     def get_by_id(reserva_id):
         """Obtiene una reserva específica por ID con información completa"""
         query = """
-            SELECT r.id, r.cliente_id, r.vehiculo_id, r.fecha_reserva, r.hora_reserva,
+            SELECT r.id, r.cliente_id, r.vehiculo_id, r.fecha_reserva,
+                   r.hora_reserva::text as hora_reserva,
                    r.servicio_solicitado, r.estado, r.observaciones,
                    r.fecha_creacion, r.fecha_actualizacion,
                    c.nombre as cliente_nombre, c.apellido as cliente_apellido,
@@ -43,7 +45,8 @@ class Reserva:
     def get_by_cliente(cliente_id):
         """Obtiene todas las reservas de un cliente específico"""
         query = """
-            SELECT r.id, r.cliente_id, r.vehiculo_id, r.fecha_reserva, r.hora_reserva,
+            SELECT r.id, r.cliente_id, r.vehiculo_id, r.fecha_reserva,
+                   r.hora_reserva::text as hora_reserva,
                    r.servicio_solicitado, r.estado, r.observaciones,
                    r.fecha_creacion, r.fecha_actualizacion,
                    c.nombre as cliente_nombre, c.apellido as cliente_apellido,
@@ -62,7 +65,8 @@ class Reserva:
     def get_by_fecha(fecha):
         """Obtiene todas las reservas de una fecha específica"""
         query = """
-            SELECT r.id, r.cliente_id, r.vehiculo_id, r.fecha_reserva, r.hora_reserva,
+            SELECT r.id, r.cliente_id, r.vehiculo_id, r.fecha_reserva,
+                   r.hora_reserva::text as hora_reserva,
                    r.servicio_solicitado, r.estado, r.observaciones,
                    r.fecha_creacion, r.fecha_actualizacion,
                    c.nombre as cliente_nombre, c.apellido as cliente_apellido,
@@ -81,7 +85,8 @@ class Reserva:
     def get_by_estado(estado):
         """Obtiene todas las reservas con un estado específico"""
         query = """
-            SELECT r.id, r.cliente_id, r.vehiculo_id, r.fecha_reserva, r.hora_reserva,
+            SELECT r.id, r.cliente_id, r.vehiculo_id, r.fecha_reserva,
+                   r.hora_reserva::text as hora_reserva,
                    r.servicio_solicitado, r.estado, r.observaciones,
                    r.fecha_creacion, r.fecha_actualizacion,
                    c.nombre as cliente_nombre, c.apellido as cliente_apellido,
@@ -100,7 +105,8 @@ class Reserva:
     def search(search_term):
         """Busca reservas por cliente, vehículo o servicio"""
         query = """
-            SELECT r.id, r.cliente_id, r.vehiculo_id, r.fecha_reserva, r.hora_reserva,
+            SELECT r.id, r.cliente_id, r.vehiculo_id, r.fecha_reserva,
+                   r.hora_reserva::text as hora_reserva,
                    r.servicio_solicitado, r.estado, r.observaciones,
                    r.fecha_creacion, r.fecha_actualizacion,
                    c.nombre as cliente_nombre, c.apellido as cliente_apellido,
@@ -128,7 +134,8 @@ class Reserva:
             INSERT INTO reservas (cliente_id, vehiculo_id, fecha_reserva, hora_reserva,
                                 servicio_solicitado, estado, observaciones)
             VALUES (%s, %s, %s, %s, %s, %s, %s)
-            RETURNING id, cliente_id, vehiculo_id, fecha_reserva, hora_reserva,
+            RETURNING id, cliente_id, vehiculo_id, fecha_reserva,
+                      hora_reserva::text as hora_reserva,
                       servicio_solicitado, estado, observaciones,
                       fecha_creacion, fecha_actualizacion
         """
@@ -156,7 +163,8 @@ class Reserva:
                 estado = %s,
                 observaciones = %s
             WHERE id = %s
-            RETURNING id, cliente_id, vehiculo_id, fecha_reserva, hora_reserva,
+            RETURNING id, cliente_id, vehiculo_id, fecha_reserva,
+                      hora_reserva::text as hora_reserva,
                       servicio_solicitado, estado, observaciones,
                       fecha_creacion, fecha_actualizacion
         """
