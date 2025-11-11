@@ -16,6 +16,7 @@ from routes.vehiculos import vehiculos_bp
 from routes.reservas import reservas_bp
 from routes.servicios import servicios_bp
 from routes.ordenes import ordenes_bp
+from routes.inventario import inventario_bp
 
 app = Flask(__name__)
 CORS(app)
@@ -26,6 +27,7 @@ app.register_blueprint(vehiculos_bp)
 app.register_blueprint(reservas_bp)
 app.register_blueprint(servicios_bp)
 app.register_blueprint(ordenes_bp)
+app.register_blueprint(inventario_bp)
 
 @app.route('/')
 def home():

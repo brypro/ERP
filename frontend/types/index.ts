@@ -181,3 +181,19 @@ export interface DashboardStats {
   reservas_hoy: number;
   ingresos_mes: number;
 }
+
+// Tipos para inventario
+export interface Producto {
+  id: number;
+  codigo: string;
+  nombre: string;
+  descripcion?: string | null;
+  categoria?: string | null;
+  stock_actual: number;
+  stock_minimo: number;
+  precio_compra: number;
+  precio_venta: number;
+  ubicacion?: string | null;
+  fecha_creacion?: string;
+  fecha_actualizacion?: string;
+}
